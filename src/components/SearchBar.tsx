@@ -1,10 +1,14 @@
 import React from 'react';
 
+interface IPropsSearchBar {
+  onFormSubmit: (term: string) => void;
+}
+
 interface IStateSearchBar {
   term: string;
 }
 
-class SearchBar extends React.Component<unknown, IStateSearchBar> {
+class SearchBar extends React.Component<IPropsSearchBar, IStateSearchBar> {
   state = { term: '' };
 
   onInputChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
@@ -15,6 +19,10 @@ class SearchBar extends React.Component<unknown, IStateSearchBar> {
 
   onFormSubmit = (event: React.FormEvent<HTMLFormElement>): void => {
     event.preventDefault();
+
+    const { onFormSubmit } = this.props;
+    const { term } = this.state;
+    onFormSubmit(term);
   };
 
   render(): React.ReactNode {
