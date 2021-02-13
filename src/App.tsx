@@ -1,21 +1,36 @@
+import { promises } from 'dns';
 import React from 'react';
 
 import youtube from './apis/youtube';
 
 import SearchBar from './components/SearchBar';
+import VideoList from './components/VideoList';
 
-const onTermSubmit = (term: string): void => {
-  youtube.get('/search', {
-    params: {
-      q: term,
-    },
-  });
-};
+class App extends React.Component {
+  state = { videos: [] };
 
-const App: React.FC = () => (
-  <div>
-    <SearchBar onFormSubmit={onTermSubmit} />
-  </div>
-);
+  onTermSubmit = async (term: string): Promise<void> => {
+    const response = await youtube.get('/search', {
+      params: {
+        q: term,
+      },
+    });
+
+    this.setState({
+      videos: response.data.items,
+    });
+  };
+
+  render(): React.ReactNode {
+    const { videos } = this.state;
+
+    return (
+      <div>
+        <SearchBar onFormSubmit={this.onTermSubmit} />
+        <VideoList videos={videos} />
+      </div>
+    );
+  }
+}
 
 export default App;
