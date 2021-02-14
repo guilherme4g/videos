@@ -1,18 +1,21 @@
-import { promises } from 'dns';
 import React from 'react';
 
 import youtube from './apis/youtube';
 
-import SearchBar from './components/SearchBar';
-import VideoList from './components/VideoList';
+import SearchBar from './components/SearchBar/SearchBar';
+import VideoList from './components/VideoList/VideoList';
+import VideoDetail from './components/VideoDetail/VideoDetail';
 
 class App extends React.Component {
   state = { videos: [] };
 
   onTermSubmit = async (term: string): Promise<void> => {
+    const language = navigator.language || 'pt-br';
+
     const response = await youtube.get('/search', {
       params: {
         q: term,
+        relevanceLanguage: language,
       },
     });
 
@@ -25,9 +28,18 @@ class App extends React.Component {
     const { videos } = this.state;
 
     return (
-      <div>
+      <div className="ui container">
         <SearchBar onFormSubmit={this.onTermSubmit} />
-        <VideoList videos={videos} />
+        <div className="ui grid">
+          <div className="ui stackable row">
+            <div className="eleven wide column">
+              <VideoDetail />
+            </div>
+            <div className="five wide column">
+              <VideoList videos={videos} />
+            </div>
+          </div>
+        </div>
       </div>
     );
   }
