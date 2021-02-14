@@ -7,7 +7,7 @@ import VideoList from './components/VideoList/VideoList';
 import VideoDetail from './components/VideoDetail/VideoDetail';
 
 class App extends React.Component {
-  state = { videos: [] };
+  state = { videos: [], selectedVideo: {} };
 
   onTermSubmit = async (term: string): Promise<void> => {
     const language = navigator.language || 'pt-br';
@@ -24,8 +24,14 @@ class App extends React.Component {
     });
   };
 
+  onVideoSelect = (video: any): void => {
+    this.setState({
+      selectedVideo: video,
+    });
+  };
+
   render(): React.ReactNode {
-    const { videos } = this.state;
+    const { videos, selectedVideo } = this.state;
 
     return (
       <div className="ui container">
@@ -33,10 +39,10 @@ class App extends React.Component {
         <div className="ui grid">
           <div className="ui stackable row">
             <div className="eleven wide column">
-              <VideoDetail />
+              <VideoDetail video={selectedVideo} />
             </div>
             <div className="five wide column">
-              <VideoList videos={videos} />
+              <VideoList videos={videos} onVideoSelect={this.onVideoSelect} />
             </div>
           </div>
         </div>
