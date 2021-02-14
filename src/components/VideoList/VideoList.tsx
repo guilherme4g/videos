@@ -9,7 +9,7 @@ interface IPropsVideoList {
 
 const VideoList: React.FC<IPropsVideoList> = ({ videos }) => {
   const renderedList = videos.map(video => {
-    return <VideoItem video={video} />;
+    return <VideoItem key={video.id.videoId} video={video} />;
   });
 
   return <div className="ui relaxed divided list">{renderedList}</div>;
