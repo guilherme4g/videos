@@ -7,7 +7,12 @@ import VideoList from './components/VideoList/VideoList';
 import VideoDetail from './components/VideoDetail/VideoDetail';
 
 class App extends React.Component {
-  state = { videos: [], selectedVideo: {} };
+  state = {
+    videos: [],
+    selectedVideo: {},
+    error:
+      'Deixa de medo, insere alguma coisa que tu gosta na barra de pesquisa',
+  };
 
   onTermSubmit = async (term: string): Promise<void> => {
     const language = navigator.language || 'pt-br';
@@ -19,10 +24,17 @@ class App extends React.Component {
       },
     });
 
-    this.setState({
-      videos: response.data.items,
-      selectedVideo: response.data.items[0],
-    });
+    if (response.status === 200) {
+      this.setState({
+        videos: response.data.items,
+        selectedVideo: response.data.items[0],
+        error: '',
+      });
+    } else {
+      this.setState({
+        error: 'Erro de conexão com a API do youtube',
+      });
+    }
   };
 
   onVideoSelect = (video: any): void => {
@@ -32,11 +44,12 @@ class App extends React.Component {
   };
 
   render(): React.ReactNode {
-    const { videos, selectedVideo } = this.state;
+    const { videos, selectedVideo, error } = this.state;
 
     return (
       <div className="ui container">
         <SearchBar onFormSubmit={this.onTermSubmit} />
+        <div>{error}</div>
         <div className="ui grid">
           <div className="ui stackable row">
             <div className="eleven wide column">

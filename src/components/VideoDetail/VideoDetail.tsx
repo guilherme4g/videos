@@ -7,7 +7,7 @@ interface IPropsVideoDetail {
 
 const VideoDetail: React.FC<IPropsVideoDetail> = ({ video }) => {
   if (!video.id) {
-    return <div> Waiting </div>;
+    return <div> </div>;
   }
 
   const videoSrc = `https://www.youtube.com/embed/${video.id.videoId}`;
